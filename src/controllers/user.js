@@ -9,14 +9,15 @@ export default async function createUser(req, res) {
       res.status(409).send('Um usuário com esse e-mail já está cadastrado');
       return;
     }
-    newUser.hashedPassword = bcrypt.hashSync(newUser.password, 10);
-    delete newUser.password;
-    await usersCollection.insertOne(newUser);
+    await connection
+      .collection('users')
+      .insertOne({
+        ...newUser,
+        password: bcrypt.hashSync(newUser.password, 10),
+      });
     res.sendStatus(201);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .send('Houve uma falha ao cadastrar usuário. Por favor, tente novamente');
+    res.status(500).send(error);
   }
 }
