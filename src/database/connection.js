@@ -2,8 +2,7 @@ import '../setup.js';
 import { MongoClient } from 'mongodb';
 
 const mongoClient = new MongoClient(process.env.MONGO_URI);
+mongoClient.connect();
 const db = mongoClient.db(process.env.DB_NAME);
 
-const connection = { mongoClient, db };
-
-export default connection;
+export default db;
