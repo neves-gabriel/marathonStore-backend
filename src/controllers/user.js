@@ -1,21 +1,44 @@
 import bcrypt from 'bcrypt';
+import signUpSchema from '../validations/signUp';
 import connection from '../database/connection.js';
 
-export default async function createUser(req, res) {
-  const newUser = req.body;
+async function userAlredyExists(email) {
+  const existentUser = await connection.query(
+    `SELECT * FROM users WHERE email = $1;`,
+    [email]
+  );
+  if (existentUser.rowCount !== 0) return existentUser.rows;
+  return false;
+}
 
+async function createUser(req, res) {
   try {
-    const participant = await connection
-      .collection('users')
-      .findOne({ email: newUser.email });
-    if (participant) return res.status(409).send('Participante já cadastrado');
+    const newUser = req.body;
 
-    await connection.collection('users').insertOne({
-      ...newUser,
-      password: bcrypt.hashSync(newUser.password, 10),
-    });
+    const validation = signUpSchema.validate(newUser);
+    if (validation.error) {
+      console.log(validation.error);
+      res.sendStatus(400);
+      return;
+    }
+
+    const { name, email, password } = newUser;
+
+    if (await userAlredyExists(email)) {
+      res.sendStatus(409);
+      return;
+    }
+
+    const passwordHash = bcrypt.hashSync(password, 10);
+    await connection.query(
+      `INSERT INTO users (name, email, password) VALUES ($1, $2, $3)`,
+      [name, email, passwordHash]
+    );
     res.sendStatus(201);
   } catch (error) {
-    res.status(500).send(error);
+    console.log(error.message);
+    res.sendStatus(500);
   }
 }
+
+export { createUser };
