@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
-
 import { Router } from 'express';
+import createUser from '../controllers/user.js';
+import signUpValidation from '../middlewares/signUpValidation.js';
 import connection from '../database/connection.js';
 
 const routes = new Router();
@@ -8,6 +8,8 @@ const routes = new Router();
 routes.get('/health', async (req, res) => {
   res.sendStatus(200);
 });
+
+routes.post('/sign-up', signUpValidation, createUser);
 
 routes.get('/test', async (req, res) => {
   try {
