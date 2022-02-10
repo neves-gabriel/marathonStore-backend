@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import createUser from '../controllers/user.js';
 import signUpValidation from '../middlewares/signUpValidation.js';
-import connection from '../database/connection.js';
+import db from '../database/connection.js';
 
 const routes = new Router();
 
@@ -13,21 +13,18 @@ routes.post('/sign-up', signUpValidation, createUser);
 
 routes.get('/test', async (req, res) => {
   try {
-    await connection.mongoClient.connect();
-    const collection = connection.db.collection('test');
+    const collection = db.collection('test');
     const response = await collection.find({}).toArray();
     res.send(response);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
   }
-  connection.mongoClient.close();
 });
 
 routes.post('/test', async (req, res) => {
   try {
-    await connection.mongoClient.connect();
-    const response = await connection.db
+    const response = await db
       .collection('test')
       .insertOne({ test: 'pai ta on!' });
     res.send(response);
@@ -35,6 +32,5 @@ routes.post('/test', async (req, res) => {
     console.log(error);
     res.sendStatus(500);
   }
-  connection.mongoClient.close();
 });
 export default routes;

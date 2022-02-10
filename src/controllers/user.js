@@ -1,15 +1,15 @@
 import bcrypt from 'bcrypt';
-import connection from '../database/connection.js';
+import db from '../database/connection.js';
 
 export default async function createUser(req, res) {
   const newUser = req.body;
   try {
-    const usersCollection = connection.collection('users');
+    const usersCollection = db.collection('users');
     if (await usersCollection.findOne({ email: newUser.email })) {
       res.status(409).send('Um usuário com esse e-mail já está cadastrado');
       return;
     }
-    await connection.collection('users').insertOne({
+    await db.collection('users').insertOne({
       ...newUser,
       password: bcrypt.hashSync(newUser.password, 10),
     });
