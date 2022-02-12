@@ -24,7 +24,7 @@ export async function createUser(req, res) {
 export async function logInUser(req, res) {
   const { email, password } = req.body;
   try {
-    const user = await db.collection('users').findUserByEmail({ email });
+    const user = await db.collection('users').findOne({ email });
     if (!user) {
       res.sendStatus(404).send('Esse e-mail não está cadastrado');
       return;
