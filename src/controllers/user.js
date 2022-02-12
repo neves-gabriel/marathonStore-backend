@@ -32,7 +32,7 @@ export async function logInUser(req, res) {
     const isAuthorized = bcrypt.compareSync(password, user.password);
     if (isAuthorized) {
       const token = uuid();
-      await db.collection('sessions').insertOne({ token, userId: user.id });
+      await db.collection('sessions').insertOne({ token, userId: user._id });
       res.sendStatus(201).send({ ...user, token });
     }
     res.sendStatus(401);
