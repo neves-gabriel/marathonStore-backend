@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { createUser, logInUser } from '../controllers/user.js';
 import signUpValidation from '../middlewares/signUpValidation.js';
-import signInValidation from '../middlewares/signInValidation.js';
+import logInValidation from '../middlewares/logInValidation';
 import db from '../database/connection.js';
 
 const routes = new Router();
@@ -12,7 +12,7 @@ routes.get('/health', async (req, res) => {
 
 routes.post('/sign-up', signUpValidation, createUser);
 
-routes.post('/login', signInValidation, logInUser);
+routes.post('/login', logInValidation, logInUser);
 
 routes.get('/test', async (req, res) => {
   try {
