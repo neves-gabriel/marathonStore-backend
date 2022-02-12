@@ -24,9 +24,9 @@ export async function createUser(req, res) {
 export async function logInUser(req, res) {
   const { email, password } = req.body;
   try {
-    const user = await db.collection('users').findOne({ email });
+    const user = await db.collection('users').findUserByEmail({ email });
     if (!user) {
-      res.sendStatus(401).send('Esse e-mail não está cadastrado');
+      res.sendStatus(404).send('Esse e-mail não está cadastrado');
       return;
     }
     const isAuthorized = bcrypt.compareSync(password, user.password);
@@ -34,8 +34,9 @@ export async function logInUser(req, res) {
       const token = uuid();
       await db.collection('sessions').insertOne({ token, userId: user._id });
       res.sendStatus(201).send({ ...user, token });
+      return;
     }
-    res.sendStatus(401);
+    res.sendStatus(401).send('Senha incorreta');
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
