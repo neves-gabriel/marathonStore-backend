@@ -26,19 +26,19 @@ export async function logInUser(req, res) {
   try {
     const user = await db.collection('users').findOne({ email });
     if (!user) {
-      res.sendStatus(401).send('Esse e-mail não está cadastrado');
+      res.status(401).send('Esse e-mail não está cadastrado');
     } else {
       const isAuthorized = bcrypt.compareSync(password, user.password);
       if (isAuthorized) {
         const token = uuid();
         await db.collection('sessions').insertOne({ token, userId: user._id });
-        res.sendStatus(201).send({ ...user, token });
+        res.status(201).send({ ...user, token });
       } else {
-        res.sendStatus(401).send('Senha incorreta');
+        res.status(401).send('Senha incorreta');
       }
     }
   } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
+    console.error(error);
+    res.status(500).send(error);
   }
 }
