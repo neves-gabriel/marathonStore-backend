@@ -40,7 +40,7 @@ export async function logInUser(req, res) {
             .insertOne({ token, userId: user._id });
         }
         res
-          .status(201)
+          .status(200)
           .send({ userId: user._id, name: user.name, email, token });
       } else {
         res.status(401).send('Senha incorreta');
