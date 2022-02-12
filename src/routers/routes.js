@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { createUser, logInUser } from '../controllers/user.js';
 import signUpValidation from '../middlewares/signUpValidation.js';
-import logInValidation from '../middlewares/logInValidation';
+import logInValidation from '../middlewares/logInValidation.js';
 import db from '../database/connection.js';
 
 const routes = new Router();
