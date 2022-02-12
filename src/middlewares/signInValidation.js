@@ -1,6 +1,6 @@
 import signInSchema from '../validations/signUp.js';
 
-export default function signUpValidation(req, res, next) {
+export default function signInValidation(req, res, next) {
   const validation = signInSchema.validate(req.body);
 
   if (validation.error) {
