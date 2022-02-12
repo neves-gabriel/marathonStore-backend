@@ -30,8 +30,15 @@ export async function logInUser(req, res) {
     } else {
       const isAuthorized = bcrypt.compareSync(password, user.password);
       if (isAuthorized) {
-        const token = uuid();
-        await db.collection('sessions').insertOne({ token, userId: user._id });
+        const receivedToken = await db
+          .collection('sessions')
+          .findOne({ userId: user._id });
+        const token = receivedToken ? receivedToken.token : uuid();
+        if (!receivedToken) {
+          await db
+            .collection('sessions')
+            .insertOne({ token, userId: user._id });
+        }
         res
           .status(201)
           .send({ userId: user._id, name: user.name, email, token });
