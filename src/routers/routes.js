@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { createUser, logInUser, logOutUser } from '../controllers/user.js';
 import signUpValidation from '../middlewares/signUpValidation.js';
 import logInValidation from '../middlewares/logInValidation.js';
+import logOutValidation from '../middlewares/logOutValidation.js';
 import db from '../database/connection.js';
 
 const routes = new Router();
@@ -14,7 +15,7 @@ routes.post('/sign-up', signUpValidation, createUser);
 
 routes.post('/login', logInValidation, logInUser);
 
-routes.delete('/logout', logOutUser);
+routes.delete('/logout', logOutValidation, logOutUser);
 
 routes.get('/products', async (req, res) => {
   try {
