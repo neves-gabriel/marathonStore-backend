@@ -15,7 +15,27 @@ routes.post('/sign-up', signUpValidation, createUser);
 
 routes.post('/login', logInValidation, logInUser);
 
-routes.delete('/logout', logOutValidation, logOutUser);
+routes.delete('/logout', async (req, res) => {
+  const { authorization } = req.headers;
+  const token = authorization?.replace('Bearer ', '');
+  if (!token) {
+    res.sendStatus(401);
+  }
+  const session = await db.collection('sessions').findOne({ token });
+  if (!session) {
+    res.sendStatus(401);
+  }
+  const user = await db.collection('users').findOne({ _id: session.userId });
+  if (!user) {
+    res.sendStatus(401);
+  }
+  try {
+    await db.collection('sessions').deleteOne({ userId: session.userId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
 
 routes.get('/products', async (req, res) => {
   try {
