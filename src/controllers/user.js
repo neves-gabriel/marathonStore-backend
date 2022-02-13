@@ -53,9 +53,9 @@ export async function logInUser(req, res) {
 }
 
 export async function logOutUser(req, res) {
-  const { userId } = req.headers.userId;
+  const { token } = req.headers.token;
   try {
-    await db.collection('sessions').deleteOne({ userId });
+    await db.collection('sessions').deleteOne({ token });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
