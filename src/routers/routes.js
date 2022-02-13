@@ -28,7 +28,7 @@ routes.get('/products', async (req, res) => {
   }
 });
 
-routes.get('/products/:id', async (req, res) => {
+routes.get('/products/:selectedCategory', async (req, res) => {
   const { selectedCategory } = req.params;
   try {
     const collection = db.collection('products');
