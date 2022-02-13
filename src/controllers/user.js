@@ -53,7 +53,7 @@ export async function logInUser(req, res) {
 }
 
 export async function logOutUser(req, res) {
-  const { userId } = req.headers;
+  const { userId } = req.headers.userId;
   try {
     await db.collection('sessions').deleteOne({ userId });
   } catch (error) {
