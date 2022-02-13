@@ -16,7 +16,7 @@ routes.post('/sign-up', signUpValidation, createUser);
 routes.post('/login', logInValidation, logInUser);
 
 routes.delete('/logout', async (req, res) => {
-  const { token } = req.headers;
+  const token = req.headers;
   try {
     await db.collection('sessions').deleteOne({ token });
   } catch (error) {
