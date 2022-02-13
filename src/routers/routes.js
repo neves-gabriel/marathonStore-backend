@@ -15,20 +15,26 @@ routes.post('/sign-up', signUpValidation, createUser);
 
 routes.post('/login', logInValidation, logInUser);
 
-routes.delete('/logout', async (req, res) => {
-  const token = req.headers;
+routes.delete('/logout', logOutValidation, logOutUser);
+
+routes.get('/products', async (req, res) => {
   try {
-    await db.collection('sessions').deleteOne({ token });
+    const collection = db.collection('products');
+    const response = await collection.find({}).toArray();
+    res.send(response);
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
   }
 });
 
-routes.get('/products', async (req, res) => {
+routes.get('/products/:id', async (req, res) => {
+  const { selectedCategory } = req.params;
   try {
     const collection = db.collection('products');
-    const response = await collection.find({}).toArray();
+    const response = await collection
+      .find({ category: selectedCategory })
+      .toArray();
     res.send(response);
   } catch (error) {
     console.error(error);
