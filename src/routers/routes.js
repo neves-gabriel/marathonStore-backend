@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { createUser, logInUser } from '../controllers/user.js';
-import { getProducts } from '../controllers/products.js';
 import signUpValidation from '../middlewares/signUpValidation.js';
 import logInValidation from '../middlewares/logInValidation.js';
 import db from '../database/connection.js';
@@ -15,7 +14,16 @@ routes.post('/sign-up', signUpValidation, createUser);
 
 routes.post('/login', logInValidation, logInUser);
 
-routes.get('/products', getProducts);
+routes.get('/products', async (req, res) => {
+  try {
+    const collection = db.collection('products');
+    const response = await collection.find({}).toArray();
+    res.send(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
 
 routes.get('/test', async (req, res) => {
   try {
