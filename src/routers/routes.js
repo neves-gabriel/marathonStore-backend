@@ -14,7 +14,7 @@ routes.post('/sign-up', signUpValidation, createUser);
 
 routes.post('/login', logInValidation, logInUser);
 
-routes.post('/logout', logOutUser);
+routes.delete('/logout', logOutUser);
 
 routes.get('/products', async (req, res) => {
   try {

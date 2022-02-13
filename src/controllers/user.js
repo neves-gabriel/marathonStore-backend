@@ -53,7 +53,7 @@ export async function logInUser(req, res) {
 }
 
 export async function logOutUser(req, res) {
-  const { token } = req.body;
+  const { token } = req.headers;
   try {
     await db.collection('sessions').deleteOne({ token });
   } catch (error) {
