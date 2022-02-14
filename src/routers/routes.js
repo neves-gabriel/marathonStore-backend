@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { createUser, logInUser, logOutUser } from '../controllers/user.js';
+import { createUser, logInUser } from '../controllers/user.js';
 import { postOrder } from '../controllers/products.js';
 import signUpValidation from '../middlewares/signUpValidation.js';
 import logInValidation from '../middlewares/logInValidation.js';
-import logOutValidation from '../middlewares/logOutValidation.js';
 import db from '../database/connection.js';
 
 const routes = new Router();
