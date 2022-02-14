@@ -62,6 +62,19 @@ routes.get('/products/:selectedCategory', async (req, res) => {
   }
 });
 
+routes.get('/releases', async (req, res) => {
+  try {
+    const collection = db.collection('releases');
+    const response = await collection
+      .find({})
+      .toArray();
+    res.send(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
 routes.get('/test', async (req, res) => {
   try {
     const collection = db.collection('test');
