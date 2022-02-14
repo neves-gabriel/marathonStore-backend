@@ -27,16 +27,15 @@ export async function postOrder(req, res) {
     res.sendStatus(401);
   }
   try {
-    await db
-      .collection('orders')
-      .insertOne({
-        userId: user._id,
-        name: user.name,
-        email: user.email,
-        products,
-        value,
-        payment,
-      });
+    await db.collection('orders').insertOne({
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+      products,
+      value,
+      payment,
+    });
+    res.status(201).send('Pedido feito com sucesso!');
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
