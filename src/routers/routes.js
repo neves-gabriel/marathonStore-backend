@@ -78,6 +78,19 @@ routes.get('/releases', async (req, res) => {
   }
 });
 
+routes.get('/highlights', async (req, res) => {
+  try {
+    const collection = db.collection('highlights');
+    const response = await collection
+      .find({})
+      .toArray();
+    res.send(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
 routes.get('/test', async (req, res) => {
   try {
     const collection = db.collection('test');
