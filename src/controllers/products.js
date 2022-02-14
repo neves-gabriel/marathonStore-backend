@@ -16,15 +16,18 @@ export async function postOrder(req, res) {
   const token = authorization?.replace('Bearer ', '');
   const { products, value, payment } = req.body;
   if (!token) {
-    res.sendStatus(401);
+    res.status(401).send('Token Invalido');
+  }
+  if (products.length < 0) {
+    res.status(401).send('Carrinho está vazio!');
   }
   const session = await db.collection('sessions').findOne({ token });
   if (!session) {
-    res.sendStatus(401);
+    res.status(401).send('Usuário não está logado');
   }
   const user = await db.collection('users').findOne({ _id: session.userId });
   if (!user) {
-    res.sendStatus(401);
+    res.status(401).send('Usuário não existe');
   }
   try {
     await db.collection('orders').insertOne({

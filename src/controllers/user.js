@@ -51,13 +51,3 @@ export async function logInUser(req, res) {
     res.status(500).send(error);
   }
 }
-
-export async function logOutUser(req, res) {
-  const { token } = req.headers.token;
-  try {
-    await db.collection('sessions').deleteOne({ token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
-  }
-}
